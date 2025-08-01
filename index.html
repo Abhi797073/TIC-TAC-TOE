@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIC TAC TOE</title>
+    <link rel="stylesheet" href="style.css" />
+
+</head>
+
+<body>
+    <main>
+        <h1> TIC TAC TOE</h1>
+        <div class="container">
+            <div class="game">
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+
+
+            </div>
+
+        </div>
+        <button id="rest-btn"> Rest game</button>
+    </main>
+    <script src="script.js"></script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/let boxes = document.querySelectorAll(".box"); // Use .box for class selector
+let reset = document.querySelector("#rest-btn"); // 'reset' instead of 'return'
+let turn0 = true; // player 0, player x
+
+const winpatterns = [
+[0, 1, 2],
+[0, 3, 6],
+[0, 4, 8],
+[1, 4, 7],
+[2, 5, 8],
+[2, 4, 6],
+[3, 4, 5],
+[6, 7, 8],
+];
+
+boxes.forEach((box, idx) => {
+box.addEventListener("click", () => {
+console.log("box was clicked");
+if (turn0) {
+// player 0
+box.innerText = "0";
+turn0 = false;
+} else {
+box.innerText = "x";
+turn0 = true;
+}
+box.disabled = true; // Use dot, not comma
+checkWinner();
+});
+});
+
+const checkWinner = () => {
+for (let pattern of winpatterns) {
+let pos1val = boxes[pattern[0]].innerText;
+let pos2val = boxes[pattern[1]].innerText;
+let pos3val = boxes[pattern[2]].innerText;
+
+if (pos1val !== "" && pos2val !== "" && pos3val !== "") {
+if (pos1val === pos2val && pos2val === pos3val) {
+console.log("winner", pos1val);
+}
+}
+}
+};*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+const boxes = document.querySelectorAll('.box');
+const restBtn = document.getElementById('rest-btn');
+let currentPlayer = 'X';
+let gameActive = true;
+let gameState = ['', '', '', '', '', '', '', '', ''];
+
+const winningConditions = [
+[0, 1, 2],
+[3, 4, 5],
+[6, 7, 8],
+[0, 3, 6],
+[1, 4, 7],
+[2, 5, 8],
+[0, 4, 8],
+[2, 4, 6]
+];
+
+function handleBoxClick(clickedBox, index) {
+if (gameState[index] !== '' || !gameActive) {
+return;
+}
+gameState[index] = currentPlayer;
+clickedBox.textContent = currentPlayer;
+if (checkWin()) {
+alert(`Player ${currentPlayer} has won!`);
+gameActive = false;
+return;
+}
+if (checkDraw()) {
+alert('Game ended in a draw!');
+gameActive = false;
+return;
+}
+currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+}
+
+function checkWin() {
+return winningConditions.some(condition => {
+const [a, b, c] = condition;
+return gameState[a] !== '' &&
+gameState[a] === gameState[b] &&
+gameState[b] === gameState[c];
+});
+}
+
+function checkDraw() {
+return gameState.every(cell => cell !== '');
+}
+
+function resetGame() {
+gameActive = true;
+currentPlayer = 'X';
+gameState = ['', '', '', '', '', '', '', '', ''];
+boxes.forEach(box => box.textContent = '');
+}
+
+boxes.forEach((box, index) => {
+box.addEventListener('click', () => handleBoxClick(box, index));
+});
+
+restBtn.addEventListener('click', resetGame);
+});
